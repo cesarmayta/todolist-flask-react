@@ -8,6 +8,7 @@ app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'todolist'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 #TABLE tarea
 mysql = MySQL(app)
@@ -29,6 +30,21 @@ def index():
         'status':True,
         'content':'',
         'message':'Bienvenido a mi apirest con Flask'
+    }
+    
+    return jsonify(context)
+
+@app.route('/tarea')
+def getTarea():
+    cursor = mysql.connection.cursor()
+    cursor.execute("select id,descripcion,estado from tarea")
+    data = cursor.fetchall()
+    print(data)
+    cursor.close()
+    
+    context = {
+        'status':True,
+        'content':data
     }
     
     return jsonify(context)
