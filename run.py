@@ -107,7 +107,21 @@ def updateTareaById(id):
 
 @app.route('/tarea/<id>',methods=['DELETE'])
 def deleteTareaById(id):
-    pass
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+                   delete from tarea
+                   where id = '"""+id+"""'
+                   """)
+    mysql.connection.commit()
+    cursor.close()
+    
+    context = {
+        'status':True,
+        'content':'',
+        'message':'registro eliminado'
+    }
+    
+    return jsonify(context)
     
 
 if __name__ == '__main__':
